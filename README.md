@@ -225,8 +225,8 @@ Modelos de IA
 | Interface Web | ✅ |
 | Captura de Imagens | ✅ |
 | Testes Ópticos | ✅ |
-| Inteligência Artificial | 🚧 |
-| Validação Clínica | 🚧 |
+| Inteligência Artificial |  |
+| Validação Clínica |  |
 
 ---
 
