@@ -13,7 +13,9 @@ Silvio Marques (IFPE)
 **Orientadores**
 
 Tiago Lima (IFPE) 
+
 Helio Bentzen (IFPE)
+
 David Ribeiro (IFPE)
 
 **Instituição**
