@@ -13,20 +13,8 @@ Modelos editáveis
 STL/
 Arquivos para impressão 3D
 
-STEP/
-Modelos universais
-
 BOM/
 Lista de materiais
-
-Schematics/
-Esquemas elétricos
-
-Datasheets/
-Manuais dos componentes
-
-Images/
-Fotos do protótipo
 
 ---
 
