@@ -185,35 +185,29 @@ Versão atual
 # Organização do Projeto
 
 ```
-article/
-Artigo científico
-
-docs/
-Documentação
-
-hardware/
-Arquivos CAD
-STL
-BOM
-
-software/
-Código Raspberry Pi
-Interface Web
-
-images/
-Fotos
-Resultados
-CAD
-
-tests/
-Ensaios realizados
-
-ai/
-Modelos de IA
+OpenPortableRetinograph/
+│
+├── hardware/
+│   Arquivos relacionados ao desenvolvimento do hardware:
+│   modelos CAD, arquivos STL, desenhos técnicos,
+│   lista de materiais (BOM), esquemáticos e documentação
+│   da montagem do protótipo.
+│
+├── software/
+│   Código-fonte utilizado no retinógrafo, incluindo
+│   aplicações para Raspberry Pi, interface Web e
+│   algoritmos de processamento de imagens.
+│
+├── images/
+│   Fotografias do desenvolvimento, protótipos,
+│   modelos CAD renderizados e resultados obtidos
+│   durante os testes do equipamento.
+│
+└── README.md
+    Documentação principal do projeto.
 ```
 
----
-
+À medida que o projeto evoluir, novos diretórios poderão ser adicionados para documentação técnica, modelos de Inteligência Artificial, artigos científicos e resultados experimentais.
 # Estado Atual
 
 | Módulo | Status |
