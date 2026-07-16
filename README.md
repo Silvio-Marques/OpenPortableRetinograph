@@ -239,16 +239,6 @@ Modelos de IA
 
 ---
 
-# Publicações
-
-Artigo submetido ao
-
-**Latinoware 2026**
-
-*"Desenvolvimento de um Retinógrafo Portátil Open Source Baseado em Raspberry Pi para Triagem Automatizada de Retinopatias"*
-
----
-
 # Agradecimentos
 
 Agradecemos às instituições e colaboradores envolvidos no desenvolvimento deste projeto, bem como à comunidade de Hardware Aberto e aos projetos Open Indirect Ophthalmoscope (OIO), Raspberry Pi Foundation e OpenCV, que serviram de inspiração para o desenvolvimento desta plataforma.
