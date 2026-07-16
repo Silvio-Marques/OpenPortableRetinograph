@@ -1,0 +1,11 @@
+/* Tailwind CSS source – compiled to static/css/tailwind.css via the CLI.
+ *
+ * To rebuild after editing templates:
+ *   npm run build:css
+ *
+ * To watch during development:
+ *   npm run watch:css
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

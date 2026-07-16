@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capture – OWL openDR</title>
+  <link href="{{ url_for('static', filename='css/tailwind.css') }}" rel="stylesheet">
+</head>
+
+<body class="h-screen bg-slate-950 text-white flex overflow-hidden">
+
+  <aside class="bg-slate-900 border-r border-slate-700 flex flex-col gap-3 p-3 w-80 shrink-0 overflow-y-auto">
+    <p class="text-slate-500 text-[10px] uppercase tracking-widest mb-1">Controls</p>
+    {% if not camera_available %}
+    <div
+      class="w-full rounded-xl border border-amber-700 bg-amber-950/40 px-3 py-2 text-[11px] text-amber-300"
+      role="status"
+    >
+      {{ camera_warning or "Câmera indisponível - você ainda pode enviar fotos para análise" }}
+    </div>
+    {% endif %}
+    {% set icon_button_names = ["Flip", "Vid", "Click", "Switch", "Shut"] %}
+    {% set camera_dependent_names = ["Flip", "Vid"] %}
+    {% for o in params %}
+    <form method="post" class="w-full">
+      {% if o == "Click" %}
+      <input type="hidden" name="focus_ok" id="focus-ok-input" value="0">
+      {% endif %}
+      <input type="hidden" name="brightness" value="{{ processing_settings.brightness }}" data-processing-input="brightness">
+      <input type="hidden" name="contrast" value="{{ processing_settings.contrast }}" data-processing-input="contrast">
+      <input type="hidden" name="fundus_threshold" value="{{ processing_settings.fundus_threshold }}" data-processing-input="fundus_threshold">
+      <input type="hidden" name="glare_threshold" value="{{ processing_settings.glare_threshold }}" data-processing-input="glare_threshold">
+      <button
+        name="d"
+        value="{{ o }}"
+        {% if o == "Click" %}id="capture-button"{% endif %}
+        {% if o == "Explain" %}id="explain-button"{% endif %}
+        {% if o == "Click" %}disabled aria-disabled="true"
+        {% elif o in camera_dependent_names and not camera_available %}disabled aria-disabled="true"{% endif %}
+        class="group w-full flex flex-col items-center gap-1.5 py-2.5 px-1 rounded-xl border font-semibold text-[11px] text-center cursor-pointer select-none transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900
+          {% if o == "Click" %}bg-amber-500 border-amber-400 text-slate-900 hover:bg-amber-400 shadow-md shadow-amber-500/20 hover:shadow-amber-400/30 focus-visible:ring-amber-400 disabled:bg-slate-700 disabled:border-slate-700 disabled:text-slate-400 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100
+          {% elif o == "Explain" %}bg-teal-700 border-teal-600 text-white hover:bg-teal-600 shadow-md shadow-teal-700/20 hover:shadow-teal-600/30 focus-visible:ring-teal-400
+          {% elif o == "Shut" %}bg-rose-950 border-rose-800 text-rose-300 hover:bg-rose-900 hover:border-rose-700 focus-visible:ring-rose-500
+          {% else %}bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700 hover:border-slate-600 focus-visible:ring-slate-400 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-800 disabled:hover:border-slate-700{% endif %}"
+      >
+        {% if o in icon_button_names %}
+        <img
+          src="{{ url_for('static', filename=o + '.jpg') }}"
+          alt=""
+          aria-hidden="true"
+          class="w-9 h-9 rounded-lg object-contain {% if o == 'Click' %}opacity-90{% else %}opacity-70 group-hover:opacity-90{% endif %}"
+        >
+        {% endif %}
+        <span>{% if o == "Click" %}Capturar{% elif o == "Explain" %}Relatório{% elif o == "Shut" %}Desligar{% elif o == "Switch" %}Trocar{% elif o == "Vid" %}Gravar{% else %}{{ o }}{% endif %}</span>
+      </button>
+    </form>
+    {% endfor %}
+
+    <form
+      method="post"
+      action="{{ url_for('upload_image') }}"
+      enctype="multipart/form-data"
+      id="upload-form"
+      data-max-bytes="{{ max_upload_bytes }}"
+      data-allowed-extensions="{{ upload_allowed_extensions | join(',') }}"
+      class="w-full rounded-2xl border border-indigo-800 bg-slate-800/60 p-3 space-y-2"
+    >
+      <p class="text-slate-500 text-[10px] uppercase tracking-widest text-center">Enviar foto</p>
+
+      <label
+        id="upload-dropzone"
+        for="upload-input"
+        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-600 bg-slate-900/60 px-3 py-4 text-center cursor-pointer transition-colors hover:border-indigo-500 hover:bg-slate-900"
+      >
+        <img
+          id="upload-preview-img"
+          alt="Pré-visualização da foto selecionada"
+          class="hidden max-h-24 w-auto rounded-lg border border-slate-700 object-cover"
+        >
+        <svg id="upload-dropzone-icon" class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+        </svg>
+        <span id="upload-dropzone-text" class="text-[11px] text-slate-400">
+          Arraste uma foto aqui ou <span class="text-indigo-400 underline">selecione um arquivo</span>
+        </span>
+        <span id="upload-filename" class="hidden text-[10px] text-slate-300 truncate max-w-full"></span>
+      </label>
+
+      <input
+        id="upload-input"
+        type="file"
+        name="image"
+        accept="image/jpeg,image/png,.jpg,.jpeg,.png"
+        required
+        aria-label="Selecionar foto da retina para análise"
+        class="sr-only"
+      >
+      <p id="upload-error" class="hidden text-[11px] text-rose-400" role="alert"></p>
+
+      <button
+        type="submit"
+        id="upload-submit"
+        class="w-full inline-flex items-center justify-center gap-1.5 rounded-xl border border-indigo-500 bg-indigo-600 py-2 text-[11px] font-semibold text-white transition-all duration-150 hover:bg-indigo-500 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+        </svg>
+        <span id="upload-submit-label">Analisar foto enviada</span>
+      </button>
+    </form>
+
+    <section class="rounded-2xl border border-slate-700 bg-slate-950/80 p-4 space-y-4">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p class="text-slate-500 text-[10px] uppercase tracking-widest">Ajustes de imagem</p>
+          <h2 class="mt-1 text-sm font-semibold text-white">Ajustes em tempo real</h2>
+        </div>
+        <button
+          type="button"
+          id="reset-processing"
+          class="rounded-lg border border-slate-600 px-2.5 py-1 text-[11px] font-semibold text-slate-200 transition hover:border-slate-500 hover:bg-slate-800"
+        >
+          Resetar
+        </button>
+      </div>
+
+      <div class="flex gap-2">
+        <button
+          type="button"
+          id="preview-mode-adjusted"
+          data-preview-mode="adjusted"
+          class="flex-1 rounded-lg border border-amber-500 bg-amber-500/15 px-3 py-2 text-xs font-semibold text-amber-300 transition"
+        >
+          Ajustada
+        </button>
+        <button
+          type="button"
+          id="preview-mode-threshold"
+          data-preview-mode="threshold"
+          class="flex-1 rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-slate-500 hover:bg-slate-800"
+        >
+          Limiar
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <label class="block">
+          <div class="mb-1 flex items-center justify-between text-xs text-slate-300">
+            <span>Brilho</span>
+            <span id="brightness-value">{{ processing_settings.brightness }}</span>
+          </div>
+          <input id="brightness-slider" type="range" min="-100" max="100" step="1" value="{{ processing_settings.brightness }}" class="w-full accent-amber-400">
+        </label>
+
+        <label class="block">
+          <div class="mb-1 flex items-center justify-between text-xs text-slate-300">
+            <span>Contraste</span>
+            <span id="contrast-value">{{ "%.2f"|format(processing_settings.contrast / 100) }}x</span>
+          </div>
+          <input id="contrast-slider" type="range" min="50" max="180" step="1" value="{{ processing_settings.contrast }}" class="w-full accent-amber-400">
+        </label>
+
+        <label class="block">
+          <div class="mb-1 flex items-center justify-between text-xs text-slate-300">
+            <span>Limiar do fundo</span>
+            <span id="fundus-threshold-value">{{ processing_settings.fundus_threshold }}</span>
+          </div>
+          <input id="fundus-threshold-slider" type="range" min="0" max="255" step="1" value="{{ processing_settings.fundus_threshold }}" class="w-full accent-amber-400">
+        </label>
+
+        <label class="block">
+          <div class="mb-1 flex items-center justify-between text-xs text-slate-300">
+            <span>Limiar de reflexo</span>
+            <span id="glare-threshold-value">{{ processing_settings.glare_threshold }}%</span>
+          </div>
+          <input id="glare-threshold-slider" type="range" min="50" max="100" step="1" value="{{ processing_settings.glare_threshold }}" class="w-full accent-amber-400">
+        </label>
+      </div>
+    </section>
+  </aside>
+
+  <main class="flex-1 flex overflow-hidden">
+    <section class="flex-1 flex flex-col overflow-hidden">
+      <div class="bg-slate-900 border-b border-slate-700 px-4 py-2 flex items-center justify-between shrink-0">
+        <span class="text-slate-500 text-xs uppercase tracking-widest">Retina Preview</span>
+        <span
+          id="grade-display"
+          class="font-bold text-sm text-amber-400"
+          aria-label="Grade: {{ grades.get('grade', 'Not Available') }}"
+        >{{ grades.get('grade') or 'N/A' }}</span>
+      </div>
+
+      <div class="flex-1 flex items-center justify-center bg-black relative overflow-hidden">
+        <img id="preview-frame" alt="Pré-visualização da retina" class="hidden">
+        <canvas id="preview-canvas" class="max-w-full max-h-full"></canvas>
+        <canvas id="analysis-canvas" class="hidden"></canvas>
+        <p id="preview-status" class="sr-only" role="status" aria-live="polite"></p>
+        <div
+          id="focus-overlay"
+          class="absolute inset-0 flex items-center justify-center bg-black/65 p-6 text-center"
+          role="alert"
+          aria-live="assertive"
+        >
+          <p class="max-w-lg text-amber-300 font-semibold text-lg">
+            {{ focus_warning_message }}
+          </p>
+        </div>
+      </div>
+
+      <div
+        id="report-panel"
+        class="{% if not overlay_filename %}hidden {% endif %}bg-slate-900 border-t border-teal-700 p-4 shrink-0"
+      >
+        <p class="text-teal-400 font-semibold text-sm mb-2">Relatório gerado</p>
+        <p id="report-summary" class="text-slate-400 text-xs mb-3">
+          DR Label:
+          <span id="report-label" class="text-white font-medium">{{ dr_label or 'N/A' }}</span>
+          &nbsp;&middot;&nbsp;
+          Confidence:
+          <span id="report-confidence" class="text-white font-medium">
+            {% if confidence is not none %}{{ "%.1f"|format(confidence * 100) }}%{% else %}N/A{% endif %}
+          </span>
+          &nbsp;&middot;&nbsp;
+          Lesion regions:
+          <span id="report-lesions" class="text-white font-medium">{{ lesion_count if lesion_count is not none else 'N/A' }}</span>
+        </p>
+        <img
+          id="report-image"
+          {% if overlay_filename %}src="{{ url_for('serve_image', filename=overlay_filename) }}"{% endif %}
+          alt="Grad-CAM heatmap overlay"
+          class="max-w-full rounded border border-teal-700 mb-3"
+        >
+        <a
+          id="report-download"
+          {% if json_filename %}href="{{ url_for('serve_image', filename=json_filename) }}"{% endif %}
+          {% if json_filename %}download="{{ json_filename }}"{% endif %}
+          class="text-teal-400 hover:text-teal-300 text-xs underline transition"
+        >&#x2B07; Download audit JSON</a>
+      </div>
+    </section>
+
+    <aside
+      id="workflow-panel"
+      data-inference-job-id="{{ inference_job_id or '' }}"
+      data-patient-id="{{ patient_id or '' }}"
+      data-camera-available="{{ 'true' if camera_available else 'false' }}"
+      data-poll-interval-ms="1000"
+      data-default-brightness="{{ processing_defaults.brightness }}"
+      data-default-contrast="{{ processing_defaults.contrast }}"
+      data-default-fundus-threshold="{{ processing_defaults.fundus_threshold }}"
+      data-default-glare-threshold="{{ processing_defaults.glare_threshold }}"
+      data-gallery-page-size="{{ gallery_page_size }}"
+      class="w-[22rem] shrink-0 border-l border-slate-700 bg-slate-900/95 p-4 flex flex-col gap-4 overflow-y-auto"
+    >
+      <div>
+        <p class="text-slate-500 text-xs uppercase tracking-widest">Passo a passo</p>
+        <h2 class="mt-1 text-lg font-semibold text-white">Acompanhamento da inferência</h2>
+      </div>
+
+      <div class="rounded-xl border border-slate-700 bg-slate-950/60 p-3">
+        <p id="workflow-message" class="text-sm text-slate-300">
+          Capture uma imagem e clique em Relatório para acompanhar o fluxo.
+        </p>
+        <p id="workflow-live-region" class="sr-only" role="status" aria-live="polite"></p>
+      </div>
+
+      {% set workflow_steps = [
+        ("received", "Imagem recebida"),
+        ("preprocessing", "Pré-processamento (limpeza de ruído)"),
+        ("inference", "Inferência do modelo"),
+        ("report", "Geração do relatório"),
+      ] %}
+      <div class="space-y-3">
+        {% for step_key, step_label in workflow_steps %}
+        <section
+          id="step-{{ step_key }}"
+          class="rounded-xl border border-slate-700 bg-slate-950/40 p-3 transition"
+        >
+          <div class="flex items-start gap-3">
+            <span
+              id="step-icon-{{ step_key }}"
+              class="mt-1 flex h-7 w-7 items-center justify-center rounded-full border border-slate-600 text-xs font-bold text-slate-400"
+            >○</span>
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-semibold text-white">{{ step_label }}</p>
+              <p id="step-status-{{ step_key }}" class="mt-1 text-xs text-slate-400">Aguardando início</p>
+              <img
+                id="step-image-{{ step_key }}"
+                alt="{{ step_label }}"
+                class="mt-3 hidden w-full rounded-lg border border-slate-700 object-contain"
+              >
+            </div>
+          </div>
+        </section>
+        {% endfor %}
+      </div>
+
+      <section id="gallery-panel" class="rounded-xl border border-slate-700 bg-slate-950/40 p-3 space-y-3">
+        <div>
+          <p class="text-slate-500 text-[10px] uppercase tracking-widest">Navegação</p>
+          <h3 class="mt-1 text-sm font-semibold text-white">Capturas do paciente</h3>
+        </div>
+
+        <div class="rounded-lg border border-slate-700 bg-slate-900/60 p-2">
+          <img id="gallery-selected-image" alt="Captura selecionada" class="w-full aspect-[4/3] rounded object-contain bg-black">
+        </div>
+
+        <dl class="grid grid-cols-1 gap-2 text-xs rounded-lg border border-slate-700 bg-slate-900/60 p-2.5">
+          <div>
+            <dt class="text-slate-500">Paciente</dt>
+            <dd id="gallery-meta-patient" class="text-slate-100 font-medium">N/A</dd>
+          </div>
+          <div>
+            <dt class="text-slate-500">Data da captura</dt>
+            <dd id="gallery-meta-date" class="text-slate-100 font-medium">N/A</dd>
+          </div>
+          <div>
+            <dt class="text-slate-500">Resultado</dt>
+            <dd id="gallery-meta-result" class="text-slate-100 font-medium">Pendente</dd>
+          </div>
+          <div>
+            <a id="gallery-meta-json" class="text-teal-400 hover:text-teal-300 underline hidden" href="#">Baixar JSON do resultado</a>
+          </div>
+        </dl>
+
+        <p id="gallery-empty-message" class="text-xs text-slate-400">
+          Nenhuma captura registrada para o paciente atual.
+        </p>
+
+        <div id="gallery-grid" class="grid grid-cols-3 gap-2"></div>
+
+        <button
+          type="button"
+          id="gallery-load-more"
+          class="hidden w-full rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-slate-500 hover:bg-slate-800"
+        >
+          Carregar mais
+        </button>
+      </section>
+    </aside>
+  </main>
+
+</body>
+<script>
+  (() => {
+    const elements = {
+      preview: document.getElementById('preview-frame'),
+      previewCanvas: document.getElementById('preview-canvas'),
+      analysisCanvas: document.getElementById('analysis-canvas'),
+      overlay: document.getElementById('focus-overlay'),
+      captureButton: document.getElementById('capture-button'),
+      focusInput: document.getElementById('focus-ok-input'),
+      previewStatus: document.getElementById('preview-status'),
+      workflowPanel: document.getElementById('workflow-panel'),
+      workflowMessage: document.getElementById('workflow-message'),
+      workflowLiveRegion: document.getElementById('workflow-live-region'),
+      gradeDisplay: document.getElementById('grade-display'),
+      reportPanel: document.getElementById('report-panel'),
+      reportImage: document.getElementById('report-image'),
+      reportDownload: document.getElementById('report-download'),
+      reportLabel: document.getElementById('report-label'),
+      reportConfidence: document.getElementById('report-confidence'),
+      reportLesions: document.getElementById('report-lesions'),
+      galleryPanel: document.getElementById('gallery-panel'),
+      galleryGrid: document.getElementById('gallery-grid'),
+      galleryEmptyMessage: document.getElementById('gallery-empty-message'),
+      gallerySelectedImage: document.getElementById('gallery-selected-image'),
+      galleryMetaPatient: document.getElementById('gallery-meta-patient'),
+      galleryMetaDate: document.getElementById('gallery-meta-date'),
+      galleryMetaResult: document.getElementById('gallery-meta-result'),
+      galleryMetaJson: document.getElementById('gallery-meta-json'),
+      galleryLoadMore: document.getElementById('gallery-load-more'),
+      brightnessSlider: document.getElementById('brightness-slider'),
+      contrastSlider: document.getElementById('contrast-slider'),
+      fundusThresholdSlider: document.getElementById('fundus-threshold-slider'),
+      glareThresholdSlider: document.getElementById('glare-threshold-slider'),
+      brightnessValue: document.getElementById('brightness-value'),
+      contrastValue: document.getElementById('contrast-value'),
+      fundusThresholdValue: document.getElementById('fundus-threshold-value'),
+      glareThresholdValue: document.getElementById('glare-threshold-value'),
+      resetProcessingButton: document.getElementById('reset-processing'),
+      adjustedPreviewButton: document.getElementById('preview-mode-adjusted'),
+      thresholdPreviewButton: document.getElementById('preview-mode-threshold'),
+    };
+
+    const missingElementNames = Object.entries(elements)
+      .filter(([, element]) => !element)
+      .map(([name]) => name);
+
+    if (missingElementNames.length) {
+      console.warn('OWL capture UI: missing required elements:', missingElementNames.join(', '));
+      return;
+    }
+
+    const {
+      preview,
+      previewCanvas,
+      analysisCanvas,
+      overlay,
+      captureButton,
+      focusInput,
+      previewStatus,
+      workflowPanel,
+      workflowMessage,
+      workflowLiveRegion,
+      gradeDisplay,
+      reportPanel,
+      reportImage,
+      reportDownload,
+      reportLabel,
+      reportConfidence,
+      reportLesions,
+      galleryGrid,
+      galleryEmptyMessage,
+      gallerySelectedImage,
+      galleryMetaPatient,
+      galleryMetaDate,
+      galleryMetaResult,
+      galleryMetaJson,
+      galleryLoadMore,
+      brightnessSlider,
+      contrastSlider,
+      fundusThresholdSlider,
+      glareThresholdSlider,
+      brightnessValue,
+      contrastValue,
+      fundusThresholdValue,
+      glareThresholdValue,
+      resetProcessingButton,
+      adjustedPreviewButton,
+      thresholdPreviewButton,
+    } = elements;
+    const explainButton = document.getElementById('explain-button');
+
+    const analysisContext = analysisCanvas.getContext('2d', { willReadFrequently: true });
+    const previewContext = previewCanvas.getContext('2d', { willReadFrequently: true });
+    const workingCanvas = document.createElement('canvas');
+    const workingContext = workingCanvas.getContext('2d', { willReadFrequently: true });
+    const processingInputs = document.querySelectorAll('[data-processing-input]');
+    const PREVIEW_UPDATE_INTERVAL_MS = 500;
+    const MAX_RENDER_DIMENSION = 480;
+    const INFERENCE_POLL_INTERVAL_MS = parseInt(
+      workflowPanel.dataset.pollIntervalMs || '1000',
+      10,
+    );
+    const MIN_FOCUS_SCORE = 140;
+    const DARK_PIXEL_THRESHOLD = 58;
+    const MIN_DARK_PIXELS = 120;
+    const MIN_DARK_DENSITY = 0.20;
+    const MIN_DARK_RATIO = 0.01;
+    const MAX_DARK_RATIO = 0.42;
+
+    const workflowSteps = {
+      received: {
+        card: document.getElementById('step-received'),
+        icon: document.getElementById('step-icon-received'),
+        status: document.getElementById('step-status-received'),
+        image: document.getElementById('step-image-received'),
+      },
+      preprocessing: {
+        card: document.getElementById('step-preprocessing'),
+        icon: document.getElementById('step-icon-preprocessing'),
+        status: document.getElementById('step-status-preprocessing'),
+        image: document.getElementById('step-image-preprocessing'),
+      },
+      inference: {
+        card: document.getElementById('step-inference'),
+        icon: document.getElementById('step-icon-inference'),
+        status: document.getElementById('step-status-inference'),
+        image: document.getElementById('step-image-inference'),
+      },
+      report: {
+        card: document.getElementById('step-report'),
+        icon: document.getElementById('step-icon-report'),
+        status: document.getElementById('step-status-report'),
+        image: document.getElementById('step-image-report'),
+      },
+    };
+
+    const defaultProcessingSettings = {
+      brightness: parseInt(workflowPanel.dataset.defaultBrightness || '0', 10),
+      contrast: parseInt(workflowPanel.dataset.defaultContrast || '100', 10),
+      fundusThreshold: parseInt(workflowPanel.dataset.defaultFundusThreshold || '65', 10),
+      glareThreshold: parseInt(workflowPanel.dataset.defaultGlareThreshold || '90', 10),
+    };
+    const processingSettings = {
+      brightness: parseInt(brightnessSlider.value, 10),
+      contrast: parseInt(contrastSlider.value, 10),
+      fundusThreshold: parseInt(fundusThresholdSlider.value, 10),
+      glareThreshold: parseInt(glareThresholdSlider.value, 10),
+    };
+
+    let inferenceJobId = workflowPanel.dataset.inferenceJobId || '';
+    const patientId = workflowPanel.dataset.patientId || '';
+    const galleryPageSize = parseInt(workflowPanel.dataset.galleryPageSize || '12', 10);
+    let inferencePollTimer = null;
+    let previewMode = 'adjusted';
+    let previewRenderFrame = null;
+    let galleryPage = 1;
+    let galleryHasMore = false;
+    let galleryIsLoading = false;
+    let selectedCaptureFilename = '';
+
+    const setFocusState = (isReady) => {
+      captureButton.disabled = !isReady;
+      captureButton.setAttribute('aria-disabled', (!isReady).toString());
+      focusInput.value = isReady ? '1' : '0';
+      overlay.classList.toggle('hidden', isReady);
+    };
+
+    const setWorkflowMessage = (message, isError = false) => {
+      workflowMessage.textContent = message;
+      workflowLiveRegion.textContent = message;
+      workflowMessage.className = isError ? 'text-sm text-rose-300' : 'text-sm text-slate-300';
+    };
+
+    const setExplainState = (isBusy) => {
+      if (!explainButton) {
+        return;
+      }
+      explainButton.disabled = isBusy;
+      explainButton.setAttribute('aria-disabled', isBusy.toString());
+    };
+
+    const formatCapturedAt = (value) => {
+      if (!value) {
+        return 'N/A';
+      }
+      const parsedDate = new Date(value);
+      if (isNaN(parsedDate.getTime())) {
+        return 'N/A';
+      }
+      return parsedDate.toLocaleString('pt-BR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+    };
+
+    const buildResultSummary = (item) => {
+      if (!item || !item.result || item.result.status !== 'ready') {
+        return 'Pendente';
+      }
+      const label = item.result.dr_label || 'N/A';
+      const confidence = typeof item.result.confidence === 'number'
+        ? `${(item.result.confidence * 100).toFixed(1)}%`
+        : 'N/A';
+      const lesions = item.result.lesion_count ?? 'N/A';
+      return `${label} · Conf.: ${confidence} · Lesões: ${lesions}`;
+    };
+
+    const renderGalleryMetadata = (item) => {
+      if (!item) {
+        galleryMetaPatient.textContent = patientId || 'N/A';
+        galleryMetaDate.textContent = 'N/A';
+        galleryMetaResult.textContent = 'Pendente';
+        galleryMetaJson.classList.add('hidden');
+        galleryMetaJson.removeAttribute('href');
+        return;
+      }
+
+      galleryMetaPatient.textContent = item.patient_id || patientId || 'N/A';
+      galleryMetaDate.textContent = formatCapturedAt(item.captured_at);
+      galleryMetaResult.textContent = buildResultSummary(item);
+      if (item.result && item.result.json_url) {
+        galleryMetaJson.href = item.result.json_url;
+        galleryMetaJson.classList.remove('hidden');
+      } else {
+        galleryMetaJson.classList.add('hidden');
+        galleryMetaJson.removeAttribute('href');
+      }
+    };
+
+    const setSelectedCapture = (item) => {
+      selectedCaptureFilename = item ? item.filename : '';
+      if (!item) {
+        gallerySelectedImage.removeAttribute('src');
+        renderGalleryMetadata(null);
+        return;
+      }
+
+      gallerySelectedImage.src = item.image_url;
+      renderGalleryMetadata(item);
+
+      galleryGrid.querySelectorAll('button[data-capture-item]').forEach((button) => {
+        const isSelected = button.dataset.filename === item.filename;
+        button.className = isSelected
+          ? 'rounded-lg border-2 border-amber-400 bg-slate-950 p-0.5 transition'
+          : 'rounded-lg border border-slate-700 bg-slate-950 p-0.5 transition hover:border-slate-500';
+      });
+    };
+
+    const appendGalleryItems = (items) => {
+      const fragment = document.createDocumentFragment();
+      items.forEach((item) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.captureItem = 'thumbnail';
+        button.dataset.filename = item.filename;
+        button.className = 'rounded-lg border border-slate-700 bg-slate-950 p-0.5 transition hover:border-slate-500';
+        button.title = `${item.patient_id} · ${formatCapturedAt(item.captured_at)}`;
+
+        const image = document.createElement('img');
+        image.src = item.thumbnail_url;
+        image.alt = `Captura ${item.filename}`;
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        image.className = 'aspect-square w-full rounded object-cover';
+
+        button.appendChild(image);
+        button.addEventListener('click', () => setSelectedCapture(item));
+        fragment.appendChild(button);
+      });
+      galleryGrid.appendChild(fragment);
+    };
+
+    const syncGalleryState = (itemsAppended) => {
+      const hasThumbnails = galleryGrid.childElementCount > 0;
+      galleryEmptyMessage.classList.toggle('hidden', hasThumbnails);
+      galleryLoadMore.classList.toggle('hidden', !galleryHasMore);
+      galleryLoadMore.disabled = galleryIsLoading;
+      galleryLoadMore.textContent = galleryIsLoading ? 'Carregando...' : 'Carregar mais';
+
+      if (!selectedCaptureFilename && itemsAppended.length > 0) {
+        setSelectedCapture(itemsAppended[0]);
+      }
+    };
+
+    const fetchGalleryPage = async (pageToLoad, append = false) => {
+      if (!patientId || galleryIsLoading) {
+        return;
+      }
+      galleryIsLoading = true;
+      syncGalleryState([]);
+
+      try {
+        const response = await fetch(`/capture-gallery?page=${pageToLoad}&page_size=${galleryPageSize}&t=${Date.now()}`, {
+          cache: 'no-store',
+        });
+        if (!response.ok) {
+          throw new Error(`Falha ao carregar galeria (${response.status})`);
+        }
+
+        const payload = await response.json();
+        if (!append) {
+          galleryGrid.innerHTML = '';
+          selectedCaptureFilename = '';
+        }
+        appendGalleryItems(payload.items || []);
+        galleryPage = payload.page || pageToLoad;
+        galleryHasMore = Boolean(payload.has_more);
+
+        if (selectedCaptureFilename) {
+          const selectedItem = (payload.items || []).find(
+            (item) => item.filename === selectedCaptureFilename,
+          );
+          if (selectedItem) {
+            setSelectedCapture(selectedItem);
+          }
+        }
+        syncGalleryState(payload.items || []);
+      } catch (error) {
+        console.warn('Falha ao carregar galeria de capturas:', error);
+        galleryEmptyMessage.textContent = 'Não foi possível carregar as capturas deste paciente.';
+        galleryEmptyMessage.classList.remove('hidden');
+        galleryHasMore = false;
+        syncGalleryState([]);
+      } finally {
+        galleryIsLoading = false;
+        syncGalleryState([]);
+      }
+    };
+
+    const resetStepCard = (stepElements) => {
+      stepElements.card.className = 'rounded-xl border border-slate-700 bg-slate-950/40 p-3 transition';
+      stepElements.icon.className = 'mt-1 flex h-7 w-7 items-center justify-center rounded-full border border-slate-600 text-xs font-bold text-slate-400';
+      stepElements.icon.textContent = '○';
+    };
+
+    const getStepStatusLabel = (status) => {
+      const labels = {
+        completed: 'Concluída',
+        running: 'Em andamento',
+        failed: 'Falhou',
+        pending: 'Aguardando início',
+      };
+      return labels[status] || labels.pending;
+    };
+
+    const renderStep = (step) => {
+      const stepElements = workflowSteps[step.key];
+      if (!stepElements) {
+        return;
+      }
+
+      resetStepCard(stepElements);
+
+      if (step.status === 'completed') {
+        stepElements.card.className = 'rounded-xl border border-emerald-700 bg-emerald-950/30 p-3 transition';
+        stepElements.icon.className = 'mt-1 flex h-7 w-7 items-center justify-center rounded-full border border-emerald-400 bg-emerald-500/15 text-xs font-bold text-emerald-300';
+        stepElements.icon.textContent = '✓';
+      } else if (step.status === 'running') {
+        stepElements.card.className = 'rounded-xl border border-amber-600 bg-amber-500/10 p-3 transition';
+        stepElements.icon.className = 'mt-1 flex h-7 w-7 items-center justify-center rounded-full border border-amber-300 bg-amber-400/10 text-xs font-bold text-amber-300';
+        stepElements.icon.textContent = '…';
+      } else if (step.status === 'failed') {
+        stepElements.card.className = 'rounded-xl border border-rose-700 bg-rose-950/30 p-3 transition';
+        stepElements.icon.className = 'mt-1 flex h-7 w-7 items-center justify-center rounded-full border border-rose-400 bg-rose-500/10 text-xs font-bold text-rose-300';
+        stepElements.icon.textContent = '!';
+      }
+
+      stepElements.status.textContent = step.detail || getStepStatusLabel(step.status);
+
+      if (step.image_url) {
+        stepElements.image.src = step.image_url;
+        stepElements.image.classList.remove('hidden');
+      } else {
+        stepElements.image.removeAttribute('src');
+        stepElements.image.classList.add('hidden');
+      }
+    };
+
+    const renderReport = (result) => {
+      if (!result || !result.overlay_image_url) {
+        reportPanel.classList.add('hidden');
+        return;
+      }
+
+      reportPanel.classList.remove('hidden');
+      reportImage.src = result.overlay_image_url;
+      reportDownload.href = result.json_url || '#';
+      if (result.json_url) {
+        reportDownload.removeAttribute('aria-disabled');
+      } else {
+        reportDownload.setAttribute('aria-disabled', 'true');
+      }
+      reportLabel.textContent = result.dr_label || 'N/A';
+      reportConfidence.textContent = typeof result.confidence === 'number'
+        ? `${(result.confidence * 100).toFixed(1)}%`
+        : 'N/A';
+      reportLesions.textContent = result.lesion_count ?? 'N/A';
+    };
+
+    const syncProcessingInputs = () => {
+      processingInputs.forEach((input) => {
+        if (input.name === 'brightness') {
+          input.value = processingSettings.brightness;
+        } else if (input.name === 'contrast') {
+          input.value = processingSettings.contrast;
+        } else if (input.name === 'fundus_threshold') {
+          input.value = processingSettings.fundusThreshold;
+        } else if (input.name === 'glare_threshold') {
+          input.value = processingSettings.glareThreshold;
+        }
+      });
+    };
+
+    const updateControlLabels = () => {
+      brightnessValue.textContent = processingSettings.brightness;
+      contrastValue.textContent = `${(processingSettings.contrast / 100).toFixed(2)}x`;
+      fundusThresholdValue.textContent = processingSettings.fundusThreshold;
+      glareThresholdValue.textContent = `${processingSettings.glareThreshold}%`;
+    };
+
+    const setPreviewMode = (mode) => {
+      previewMode = mode;
+      const isAdjusted = mode === 'adjusted';
+      adjustedPreviewButton.className = isAdjusted
+        ? 'flex-1 rounded-lg border border-amber-500 bg-amber-500/15 px-3 py-2 text-xs font-semibold text-amber-300 transition'
+        : 'flex-1 rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-slate-500 hover:bg-slate-800';
+      thresholdPreviewButton.className = !isAdjusted
+        ? 'flex-1 rounded-lg border border-amber-500 bg-amber-500/15 px-3 py-2 text-xs font-semibold text-amber-300 transition'
+        : 'flex-1 rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-slate-500 hover:bg-slate-800';
+      schedulePreviewRender();
+    };
+
+    const renderPreview = () => {
+      if (!preview.naturalWidth || !preview.naturalHeight || !previewContext || !workingContext) {
+        return;
+      }
+
+      const scale = Math.min(
+        1,
+        MAX_RENDER_DIMENSION / Math.max(preview.naturalWidth, preview.naturalHeight),
+      );
+      const width = Math.max(1, Math.round(preview.naturalWidth * scale));
+      const height = Math.max(1, Math.round(preview.naturalHeight * scale));
+      if (previewCanvas.width !== width || previewCanvas.height !== height) {
+        previewCanvas.width = width;
+        previewCanvas.height = height;
+      }
+      if (workingCanvas.width !== width || workingCanvas.height !== height) {
+        workingCanvas.width = width;
+        workingCanvas.height = height;
+      }
+
+      workingContext.drawImage(preview, 0, 0, width, height);
+      const frame = workingContext.getImageData(0, 0, width, height);
+      const { data } = frame;
+      const contrast = processingSettings.contrast / 100;
+      const brightness = processingSettings.brightness;
+      const glareThreshold = (processingSettings.glareThreshold / 100) * 255;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const red = Math.max(0, Math.min(255, (data[i] * contrast) + brightness));
+        const green = Math.max(0, Math.min(255, (data[i + 1] * contrast) + brightness));
+        const blue = Math.max(0, Math.min(255, (data[i + 2] * contrast) + brightness));
+        const gray = (0.299 * red) + (0.587 * green) + (0.114 * blue);
+
+        if (previewMode === 'threshold') {
+          const binaryValue = gray >= processingSettings.fundusThreshold ? 255 : 0;
+          data[i] = binaryValue;
+          data[i + 1] = binaryValue;
+          data[i + 2] = binaryValue;
+          continue;
+        }
+
+        data[i] = red;
+        data[i + 1] = green;
+        data[i + 2] = blue;
+
+        if (Math.max(red, green, blue) >= glareThreshold) {
+          data[i] = 255;
+          data[i + 1] = Math.min(255, green + 40);
+          data[i + 2] = Math.max(0, blue - 70);
+        }
+      }
+
+      previewContext.putImageData(frame, 0, 0);
+    };
+
+    const schedulePreviewRender = () => {
+      if (previewRenderFrame !== null) {
+        return;
+      }
+
+      previewRenderFrame = window.requestAnimationFrame(() => {
+        previewRenderFrame = null;
+        renderPreview();
+      });
+    };
+
+    const stopInferencePolling = () => {
+      if (inferencePollTimer) {
+        clearInterval(inferencePollTimer);
+        inferencePollTimer = null;
+      }
+    };
+
+    const renderInferenceStatus = (payload) => {
+      payload.steps.forEach(renderStep);
+      renderReport(payload.result);
+
+      if (payload.grade_message) {
+        gradeDisplay.textContent = payload.grade_message;
+        gradeDisplay.setAttribute('aria-label', `Grade: ${payload.grade_message}`);
+      }
+
+      if (payload.status === 'failed') {
+        setWorkflowMessage(payload.error || 'A inferência falhou.', true);
+        setExplainState(false);
+        stopInferencePolling();
+        return;
+      }
+
+      if (payload.status === 'completed') {
+        setWorkflowMessage('Fluxo concluído. O relatório está pronto.');
+        setExplainState(false);
+        stopInferencePolling();
+        return;
+      }
+
+      setWorkflowMessage(payload.message || 'Acompanhando o progresso da inferência.');
+      setExplainState(true);
+    };
+
+    const pollInferenceStatus = async () => {
+      if (!inferenceJobId) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/inference-status/${inferenceJobId}?t=${Date.now()}`, {
+          cache: 'no-store',
+        });
+        if (!response.ok) {
+          throw new Error(`Status da inferência indisponível (${response.status} ${response.statusText})`);
+        }
+        const payload = await response.json();
+        renderInferenceStatus(payload);
+      } catch (error) {
+        console.warn('Falha ao consultar o progresso da inferência:', error);
+        setWorkflowMessage('Falha ao acompanhar o progresso da inferência.', true);
+        setExplainState(false);
+        stopInferencePolling();
+      }
+    };
+
+    const startInferencePolling = () => {
+      if (!inferenceJobId) {
+        return;
+      }
+
+      stopInferencePolling();
+      setWorkflowMessage('Acompanhando a inferência em tempo real...');
+      setExplainState(true);
+      pollInferenceStatus();
+      inferencePollTimer = setInterval(pollInferenceStatus, INFERENCE_POLL_INTERVAL_MS);
+    };
+
+    const detectEyeInFocus = () => {
+      const width = 176;
+      const height = 132;
+      analysisCanvas.width = width;
+      analysisCanvas.height = height;
+      analysisContext.drawImage(preview, 0, 0, width, height);
+
+      const { data } = analysisContext.getImageData(0, 0, width, height);
+      const gray = new Float32Array(width * height);
+      let darkCount = 0;
+      let minX = width;
+      let minY = height;
+      let maxX = 0;
+      let maxY = 0;
+
+      for (let i = 0, p = 0; i < data.length; i += 4, p += 1) {
+        const value = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+        gray[p] = value;
+        if (value < DARK_PIXEL_THRESHOLD) {
+          darkCount += 1;
+          const x = p % width;
+          const y = (p / width) | 0;
+          minX = Math.min(minX, x);
+          minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x);
+          maxY = Math.max(maxY, y);
+        }
+      }
+
+      if (darkCount < MIN_DARK_PIXELS) {
+        return false;
+      }
+
+      let laplacianMean = 0;
+      let laplacianSquaredMean = 0;
+      let count = 0;
+      for (let y = 1; y < height - 1; y += 1) {
+        for (let x = 1; x < width - 1; x += 1) {
+          const idx = y * width + x;
+          const laplacian = (
+            gray[idx - 1] + gray[idx + 1] + gray[idx - width] + gray[idx + width] - (4 * gray[idx])
+          );
+          laplacianMean += laplacian;
+          laplacianSquaredMean += laplacian * laplacian;
+          count += 1;
+        }
+      }
+
+      if (!count) {
+        return false;
+      }
+
+      laplacianMean /= count;
+      const focusScore = (laplacianSquaredMean / count) - (laplacianMean * laplacianMean);
+
+      const boxWidth = Math.max(1, maxX - minX + 1);
+      const boxHeight = Math.max(1, maxY - minY + 1);
+      const darkDensity = darkCount / (boxWidth * boxHeight);
+      const darkRatio = darkCount / (width * height);
+      const hasEyeContour = (
+        darkDensity > MIN_DARK_DENSITY
+        && darkRatio > MIN_DARK_RATIO
+        && darkRatio < MAX_DARK_RATIO
+      );
+
+      return focusScore >= MIN_FOCUS_SCORE && hasEyeContour;
+    };
+
+    const updatePreview = async () => {
+      try {
+        const response = await fetch(`/preview-frame?t=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) {
+          previewStatus.textContent = 'Pré-visualização indisponível no momento.';
+          setFocusState(false);
+          return;
+        }
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        await new Promise((resolve, reject) => {
+          preview.onload = () => {
+            URL.revokeObjectURL(objectUrl);
+            resolve();
+          };
+          preview.onerror = () => {
+            URL.revokeObjectURL(objectUrl);
+            reject(new Error('preview load failed'));
+          };
+          preview.src = objectUrl;
+        });
+        previewStatus.textContent = '';
+        schedulePreviewRender();
+        setFocusState(detectEyeInFocus());
+      } catch (error) {
+        console.warn('Falha ao atualizar pré-visualização da câmera:', error);
+        previewStatus.textContent = 'Falha ao carregar pré-visualização da câmera.';
+        setFocusState(false);
+      }
+    };
+
+    const bindSlider = (slider, property) => {
+      slider.addEventListener('input', () => {
+        processingSettings[property] = parseInt(slider.value, 10);
+        syncProcessingInputs();
+        updateControlLabels();
+        schedulePreviewRender();
+      });
+    };
+
+    bindSlider(brightnessSlider, 'brightness');
+    bindSlider(contrastSlider, 'contrast');
+    bindSlider(fundusThresholdSlider, 'fundusThreshold');
+    bindSlider(glareThresholdSlider, 'glareThreshold');
+
+    resetProcessingButton.addEventListener('click', () => {
+      brightnessSlider.value = defaultProcessingSettings.brightness;
+      contrastSlider.value = defaultProcessingSettings.contrast;
+      fundusThresholdSlider.value = defaultProcessingSettings.fundusThreshold;
+      glareThresholdSlider.value = defaultProcessingSettings.glareThreshold;
+      processingSettings.brightness = defaultProcessingSettings.brightness;
+      processingSettings.contrast = defaultProcessingSettings.contrast;
+      processingSettings.fundusThreshold = defaultProcessingSettings.fundusThreshold;
+      processingSettings.glareThreshold = defaultProcessingSettings.glareThreshold;
+      syncProcessingInputs();
+      updateControlLabels();
+      schedulePreviewRender();
+    });
+
+    adjustedPreviewButton.addEventListener('click', () => setPreviewMode('adjusted'));
+    thresholdPreviewButton.addEventListener('click', () => setPreviewMode('threshold'));
+    galleryLoadMore.addEventListener('click', () => {
+      if (!galleryHasMore || galleryIsLoading) {
+        return;
+      }
+      fetchGalleryPage(galleryPage + 1, true);
+    });
+
+    syncProcessingInputs();
+    updateControlLabels();
+    setPreviewMode('adjusted');
+    setFocusState(false);
+    if (workflowPanel.dataset.cameraAvailable === 'true') {
+      updatePreview();
+      setInterval(updatePreview, PREVIEW_UPDATE_INTERVAL_MS);
+    } else {
+      previewStatus.textContent = 'Câmera indisponível.';
+    }
+    startInferencePolling();
+    fetchGalleryPage(1, false);
+  })();
+</script>
+<script>
+  (() => {
+    const form = document.getElementById('upload-form');
+    const input = document.getElementById('upload-input');
+    const dropzone = document.getElementById('upload-dropzone');
+    const previewImg = document.getElementById('upload-preview-img');
+    const dropzoneText = document.getElementById('upload-dropzone-text');
+    const filenameLabel = document.getElementById('upload-filename');
+    const errorText = document.getElementById('upload-error');
+    const submitButton = document.getElementById('upload-submit');
+    const submitLabel = document.getElementById('upload-submit-label');
+
+    if (!form || !input || !dropzone || !previewImg || !dropzoneText
+      || !filenameLabel || !errorText || !submitButton || !submitLabel) {
+      return;
+    }
+
+    const maxBytes = parseInt(form.dataset.maxBytes || '0', 10) || Infinity;
+    const allowedExtensions = (form.dataset.allowedExtensions || '')
+      .split(',')
+      .map((ext) => ext.trim().toLowerCase())
+      .filter(Boolean);
+
+    let previewObjectUrl = null;
+
+    const showError = (message) => {
+      errorText.textContent = message;
+      errorText.classList.remove('hidden');
+      submitButton.disabled = true;
+    };
+
+    const clearError = () => {
+      errorText.textContent = '';
+      errorText.classList.add('hidden');
+      submitButton.disabled = false;
+    };
+
+    const hasAllowedExtension = (filename) => {
+      const lower = filename.toLowerCase();
+      return allowedExtensions.some((ext) => lower.endsWith(ext));
+    };
+
+    const applySelectedFile = (file) => {
+      if (!file) {
+        return;
+      }
+      if (!hasAllowedExtension(file.name)) {
+        showError('Formato inválido - envie um arquivo JPG ou PNG.');
+        return;
+      }
+      if (file.size > maxBytes) {
+        const maxMb = (maxBytes / (1024 * 1024)).toFixed(0);
+        showError(`Arquivo muito grande - o máximo é ${maxMb} MB.`);
+        return;
+      }
+
+      clearError();
+      filenameLabel.textContent = file.name;
+      filenameLabel.classList.remove('hidden');
+      dropzoneText.classList.add('hidden');
+
+      if (previewObjectUrl) {
+        URL.revokeObjectURL(previewObjectUrl);
+      }
+      previewObjectUrl = URL.createObjectURL(file);
+      previewImg.src = previewObjectUrl;
+      previewImg.classList.remove('hidden');
+    };
+
+    input.addEventListener('change', () => {
+      applySelectedFile(input.files && input.files[0]);
+    });
+
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        dropzone.classList.add('border-indigo-500', 'bg-slate-900');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        dropzone.classList.remove('border-indigo-500', 'bg-slate-900');
+      });
+    });
+
+    dropzone.addEventListener('drop', (event) => {
+      const file = event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0];
+      if (!file) {
+        return;
+      }
+      input.files = event.dataTransfer.files;
+      applySelectedFile(file);
+    });
+
+    form.addEventListener('submit', (event) => {
+      if (!input.files || !input.files[0]) {
+        event.preventDefault();
+        showError('Selecione uma foto antes de enviar.');
+        return;
+      }
+      submitButton.disabled = true;
+      submitLabel.textContent = 'Enviando...';
+    });
+  })();
+</script>
+</html>

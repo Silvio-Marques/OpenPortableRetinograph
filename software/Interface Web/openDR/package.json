@@ -1,0 +1,13 @@
+{
+  "name": "opendr-ui",
+  "version": "1.0.0",
+  "description": "Tailwind CSS build tooling for openDR UI",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./static/css/tailwind.src.css -o ./static/css/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./static/css/tailwind.src.css -o ./static/css/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.19"
+  }
+}

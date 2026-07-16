@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OWL – openDR</title>
+  <link href="{{ url_for('static', filename='css/tailwind.css') }}" rel="stylesheet">
+</head>
+
+<body class="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+  <div class="bg-slate-900 rounded-2xl shadow-2xl p-8 w-full max-w-sm border border-slate-700">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-amber-400 tracking-wide">OWL</h1>
+      <p class="text-slate-400 text-sm mt-2">openDR &mdash; Retinal Fundus System</p>
+    </div>
+
+    <!-- Patient ID Form -->
+    <form action="." method="POST">
+      <label for="patient-id" class="block text-slate-300 text-sm font-medium mb-2">
+        Patient MR Number
+      </label>
+      <input
+        id="patient-id"
+        type="text"
+        name="text"
+        autocomplete="off"
+        placeholder="e.g.&nbsp;MR12345"
+        class="w-full bg-slate-800 text-white border border-slate-600 rounded-lg px-4 py-3 text-base placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+      >
+      <button
+        type="submit"
+        name="my-form"
+        class="mt-4 w-full inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 active:bg-amber-600 active:scale-[0.98] text-slate-900 font-semibold py-3 rounded-xl transition-all duration-150 text-sm tracking-wide shadow-lg shadow-amber-500/25 hover:shadow-amber-400/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+      >
+        Start Session
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      </button>
+    </form>
+
+  </div>
+</body>
+</html>
