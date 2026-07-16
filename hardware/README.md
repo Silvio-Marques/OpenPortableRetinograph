@@ -16,6 +16,9 @@ Arquivos para impressão 3D
 BOM/
 Lista de materiais
 
+Drawings/ 
+Desenhos técnicos
+
 ---
 
 ## Arquitetura Física
