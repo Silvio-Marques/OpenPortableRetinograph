@@ -1,0 +1,34 @@
+Item,Subsystem,Component,Specification,Manufacturer,Quantity,Unit,Unit Cost (USD),Total Cost (USD),Notes
+M01,Mechanical,Main Housing,3D printed PLA enclosure,Custom,1,pcs,,,Printed in PLA
+M02,Mechanical,Optical Box,3D printed PLA,Custom,1,pcs,,,Holds optical components
+M03,Mechanical,Smartphone Mount,3D printed PLA,Custom,1,pcs,,,Wi-Fi interface support
+M04,Mechanical,Internal Supports,3D printed PLA,Custom,1,set,,,Camera and Raspberry Pi supports
+M05,Mechanical,Rear Cover,3D printed PLA,Custom,1,pcs,,,Electronic compartment cover
+M06,Mechanical,Face Support,3D printed TPU,2,pcs,,,Available in different sizes
+M07,Mechanical,Base Plate,3 mm MDF,Custom,1,pcs,,,Structural reinforcement
+M08,Mechanical,Fasteners,M3 screws, nuts and spacers,Commercial,1,set,,,Assembly hardware
+
+O01,Optical,Condensing Lens,+20D, Ø40 mm, BK7,Volk,1,pcs,210.00,210.00,Main imaging lens
+O02,Optical,First Surface Mirror,50 mm × 50 mm,Commercial,2,pcs,,,Optical path
+O03,Optical,M12 Lens,3.6 mm F1.8,Commercial,1,pcs,,,Camera lens
+
+A01,Acquisition,Raspberry Pi Camera Module,OV5647 5MP Sensor,Raspberry Pi Compatible,1,pcs,16.00,16.00,1080p maximum resolution
+
+C01,Embedded Computing,Raspberry Pi 4 Model B,2 GB RAM,Raspberry Pi Foundation,1,pcs,,,Main embedded computer
+C02,Embedded Computing,microSD Card,16 GB Class 10,Commercial,1,pcs,,,Operating system storage
+C03,Embedded Computing,GPIO Interface Board,Custom PCB,Custom,1,pcs,,,Peripheral connections
+C04,Embedded Computing,FFC Camera Cable,15 cm,Commercial,1,pcs,,,Camera connection
+
+L01,Lighting,LED Ring,3 W, 3 V, 120°, White,Commercial,1,pcs,,,Fundus illumination
+L02,Lighting,LED Driver,PWM Driver,Custom,1,pcs,,,Brightness control
+L03,Lighting,Wiring,Cables and connectors,Commercial,1,set,,,Electrical connections
+
+P01,Power,18650 Battery,3000 mAh Li-Ion,Commercial,2,pcs,,,Rechargeable batteries
+P02,Power,Voltage Regulator,5 V / 5 A DC-DC Converter,Commercial,1,pcs,,,Power regulation
+P03,Power,Battery Holder,Dual 18650 Holder,Commercial,1,pcs,,,Battery support
+
+S01,Software,Web Interface,Flask-based GUI,Custom,1,license,,,Remote operation
+S02,Software,Operating System,Raspberry Pi OS,Open Source,1,license,,,Embedded Linux
+S03,Software,Camera Control,Python + OpenCV + Picamera2,Open Source,1,license,,,Image acquisition
+
+TOTAL,,Estimated Hardware Cost,,,,,491.00,491.00,
