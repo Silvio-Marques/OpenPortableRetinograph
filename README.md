@@ -8,17 +8,17 @@
 
 **Desenvolvido por**
 
-*Seu nome*
+Silvio Marques 
 
 **Orientador**
 
-*Nome do orientador*
+Tiago Lima 
 
 **Instituição**
 
-Universidade XXX
+IFPE CAMPUS PALMARES
 
-Laboratório XXX
+Laboratório Maker campus Palmares
 
 Brasil
 
