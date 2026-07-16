@@ -50,6 +50,40 @@ O protótipo **não possui certificação para uso clínico** e não deve ser ut
 
 ---
 
+# Software Ecosystem
+
+O retinógrafo foi desenvolvido para operar de forma modular, permitindo integração com diferentes sistemas de Inteligência Artificial para análise das imagens adquiridas.
+
+## OpenDR
+
+Sistema para triagem automática de Retinopatia Diabética.
+
+- Repositório: https://github.com/heliobentzen/openDR
+
+Principais recursos:
+
+- Captura automatizada
+- Interface Web
+- TensorFlow Lite
+- Grad-CAM
+- Relatórios
+- Classificação automática
+
+---
+
+## Glaucoma AI
+
+Sistema baseado em Deep Learning para classificação de glaucoma a partir de imagens retinianas.
+
+- Demonstração:
+https://huggingface.co/spaces/tiagopessoalim/glaucoma
+
+Aplicação prevista:
+
+- Segunda opinião diagnóstica
+- Apoio ao rastreamento de glaucoma
+
+---
 # Versão
 
 Versão atual
