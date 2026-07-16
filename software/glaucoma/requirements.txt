@@ -1,0 +1,10 @@
+gradio>=4.0
+huggingface_hub>=0.23
+torch
+torchvision
+timm
+pillow
+opencv-python-headless
+albumentations
+scikit-learn
+matplotlib

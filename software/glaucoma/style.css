@@ -1,0 +1,397 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body,
+.gradio-container {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at top, #0f172a 0%, #020617 100%);
+    color: #e2e8f0;
+    min-height: 100vh;
+}
+
+.hero {
+    text-align: center;
+    padding: 2.5rem 2rem 2rem;
+    background: linear-gradient(135deg, #0a0f1e 0%, #1e1b4b 100%);
+    color: #f1f5f9;
+    border-radius: 0 0 2rem 2rem;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid #334155;
+}
+
+.hero h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, #60a5fa, #c084fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    margin: 0.6rem 0 0;
+    font-size: 1.05rem;
+    opacity: 0.85;
+}
+
+.warning-box {
+    background: #1e1b2e;
+    border: 1px solid #f59e0b;
+    border-left: 6px solid #f59e0b;
+    border-radius: 0.9rem;
+    padding: 0.95rem 1.1rem;
+    margin-bottom: 1.25rem;
+    color: #fcd34d;
+    font-size: 0.96rem;
+    font-weight: 500;
+}
+
+.warning-box strong {
+    color: #fbbf24;
+}
+
+.result-card,
+.lesions-card,
+.gradcam-card,
+.instruction-box {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(2px);
+    border: 1px solid #334155;
+    border-radius: 1rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.result-card,
+.lesions-card,
+.gradcam-card {
+    padding: 1.2rem;
+    margin-top: 1rem;
+}
+
+.verdict {
+    margin-bottom: 0.85rem;
+}
+
+.details {
+    color: #e2e8f0;
+    font-size: 1rem;
+}
+
+.detail-row {
+    margin-top: 0.5rem;
+    line-height: 1.5;
+}
+
+.result-card .label {
+    color: #cbd5e1;
+    font-weight: 700;
+}
+
+.result-card .value {
+    color: #e2e8f0;
+    font-weight: 600;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 0.45rem;
+    padding: 0.08rem 0.45rem;
+}
+
+.disclaimer {
+    margin-top: 0.95rem;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.lesions-card h3 {
+    margin: 0 0 0.65rem;
+    color: #f1f5f9;
+    font-weight: 700;
+}
+
+.lesions-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.lesions-card th {
+    text-align: left;
+    padding: 0.72rem 0.65rem;
+    border-bottom: 2px solid #334155;
+    color: #cbd5e1;
+    background: #0f172a;
+}
+
+.lesions-card td {
+    padding: 0.7rem 0.65rem;
+    border-bottom: 1px solid #1e293b;
+    color: #e2e8f0;
+}
+
+.feature-present td:first-child {
+    color: #f87171;
+    font-weight: 600;
+}
+
+.feature-absent td:first-child {
+    color: #4ade80;
+    font-weight: 600;
+}
+
+.status-badge {
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.status-badge.active {
+    background: #7f1d1d;
+    color: #fecaca;
+}
+
+.status-badge.inactive {
+    background: #14532d;
+    color: #bbf7d0;
+}
+
+.gradcam-card {
+    text-align: center;
+    padding-bottom: 0.9rem;
+}
+
+.gradcam-title {
+    margin: 0 0 0.45rem;
+    color: #f1f5f9;
+    font-weight: 700;
+}
+
+.gradcam-compare {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    border-radius: 0.9rem;
+    overflow: hidden;
+    cursor: ew-resize;
+    user-select: none;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+    border: 1px solid #334155;
+}
+
+.gradcam-base {
+    width: 100%;
+    display: block;
+}
+
+.gradcam-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    clip-path: inset(0 calc(100% - var(--pos, 0%)) 0 0);
+}
+
+.gradcam-hitarea {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    margin: 0;
+    z-index: 30;
+    cursor: ew-resize;
+}
+
+.gradcam-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos, 0%);
+    width: 4px;
+    background: #e2e8f0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gradcam-handle span {
+    color: #0f172a;
+    background: #e2e8f0;
+    border-radius: 999px;
+    font-size: 1rem;
+    padding: 0.15rem 0.35rem;
+    line-height: 1;
+}
+
+.gradcam-hint {
+    margin: 0.65rem 0 0;
+    color: #94a3b8;
+    font-weight: 500;
+    font-size: 0.92rem;
+}
+
+.instruction-box {
+    margin-top: 1rem;
+    padding: 1rem 1.1rem;
+    color: #e2e8f0;
+}
+
+.instruction-box strong {
+    color: #f1f5f9;
+    font-size: 0.98rem;
+}
+
+.instruction-box ol {
+    margin: 0.55rem 0 0;
+    padding-left: 1.25rem;
+}
+
+.instruction-box li {
+    color: #cbd5e1;
+    font-weight: 500;
+    line-height: 1.45;
+    margin-bottom: 0.35rem;
+}
+
+button.primary {
+    background: #3b82f6 !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-radius: 999px !important;
+    padding: 0.78rem 2.3rem !important;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4) !important;
+}
+
+button.primary:hover {
+    background: #2563eb !important;
+}
+
+button.secondary {
+    background: #1e293b !important;
+    border: 1px solid #475569 !important;
+    color: #e2e8f0 !important;
+    font-weight: 600 !important;
+    border-radius: 999px !important;
+    padding: 0.78rem 2.3rem !important;
+}
+
+button.secondary:hover {
+    background: #334155 !important;
+    border-color: #64748b !important;
+}
+
+.result-card.placeholder,
+.result-card.error {
+    text-align: center;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.gradio-container .gradio-examples,
+.gradio-container .gradio-examples * {
+    color: #e2e8f0 !important;
+}
+
+.gradio-container .gradio-examples {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    border-radius: 0.9rem !important;
+    padding: 0.85rem !important;
+}
+
+.gradio-container .gradio-examples .label-wrap,
+.gradio-container .gradio-examples [data-testid='block-label'] {
+    color: #f1f5f9 !important;
+    font-weight: 700 !important;
+    opacity: 1 !important;
+}
+
+/* Paginação de exemplos - Dark Mode */
+.gradio-container .gradio-examples button,
+.gradio-container .gradio-examples [role='button'],
+.gradio-container .gradio-examples .paginate,
+.gradio-container .gradio-examples .pagination,
+.gradio-container .gradio-examples [class*='page'] {
+    color: #e2e8f0 !important;
+    font-weight: 700 !important;
+    background: #1e293b !important;
+    border-color: #475569 !important;
+    opacity: 1 !important;
+}
+
+.gradio-container .gradio-examples button:hover,
+.gradio-container .gradio-examples [role='button']:hover {
+    background: #334155 !important;
+}
+
+/* Input de imagem - Dark Mode */
+.gradio-container input,
+.gradio-container [data-testid='image'] {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+.gradio-container .gr-box,
+.gradio-container .gr-form,
+.gradio-container .gr-panel,
+.gradio-container .gr-input,
+.gradio-container .gr-textbox,
+.gradio-container .gr-markdown,
+.gradio-container .gr-html {
+    color: #e2e8f0 !important;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f172a;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+footer {
+    visibility: hidden;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 2rem 1rem 1.6rem;
+        border-radius: 0 0 1.4rem 1.4rem;
+    }
+
+    .hero h1 {
+        font-size: 1.65rem;
+    }
+
+    .hero p {
+        font-size: 0.95rem;
+    }
+
+    .result-card,
+    .lesions-card,
+    .gradcam-card,
+    .instruction-box {
+        padding: 1rem;
+    }
+}
