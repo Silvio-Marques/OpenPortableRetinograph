@@ -8,11 +8,13 @@
 
 **Desenvolvido por**
 
-Silvio Marques 
+Silvio Marques (IFPE)
 
-**Orientador**
+**Orientadores**
 
-Tiago Lima 
+Tiago Lima (IFPE) 
+Helio Bentzen (IFPE)
+David Ribeiro (IFPE)
 
 **Instituição**
 
@@ -249,7 +251,7 @@ Agradecemos às instituições e colaboradores envolvidos no desenvolvimento des
 
 Autor
 
-e-mail@universidade.br
+smxj@discente.ifpe.edu.br
 
 GitHub
 
