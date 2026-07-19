@@ -1,16 +1,16 @@
 # Software
 
-O software do **Open Portable Retinograph** é responsável pelo controle do hardware, aquisição das imagens retinianas, comunicação com o usuário e execução dos algoritmos de processamento e Inteligência Artificial.
+The **Open Portable Retinograph (OPR)** software is responsible for hardware control, retinal image acquisition, user interaction, and the execution of image processing and Artificial Intelligence algorithms.
 
-A arquitetura foi desenvolvida de forma modular, permitindo que cada componente evolua independentemente.
+The software architecture was designed with a modular approach, allowing each component to be developed and maintained independently.
 
 ---
 
-## Estrutura
+# Directory Structure
 
-```
+```text
 software/
-├── Interface Web/
+├── Web Interface/
 │   └── openDR/
 │
 ├── RaspberryPi/
@@ -22,133 +22,133 @@ software/
 
 ---
 
-## Diretórios
+# Directories
 
-### Interface Web/openDR/
+## Web Interface/openDR/
 
-Contém a interface gráfica utilizada para operar o retinógrafo.
+Contains the graphical user interface used to operate the retinograph.
 
-Principais funcionalidades:
+**Key Features**
 
-- Visualização em tempo real da câmera;
-- Captura de imagens;
-- Controle remoto via navegador;
-- Comunicação Wi-Fi com a Raspberry Pi;
-- Armazenamento das imagens;
-- Interface responsiva para smartphones e computadores;
-- Integração com o pipeline de processamento.
+* Real-time camera preview
+* Image acquisition
+* Browser-based remote control
+* Wi-Fi communication with the Raspberry Pi
+* Image storage
+* Responsive interface for smartphones and desktop computers
+* Integration with the image processing pipeline
 
-Tecnologias utilizadas:
+**Technologies**
 
-- Python
-- Flask
-- HTML
-- CSS
-- JavaScript
-- OpenCV
-
----
-
-### RaspberryPi/
-
-Contém todos os programas executados diretamente na Raspberry Pi.
-
-Responsabilidades:
-
-- Inicialização do sistema;
-- Controle da câmera M12;
-- Controle da iluminação LED;
-- Comunicação GPIO;
-- Gerenciamento do armazenamento;
-- Configuração da rede Wi-Fi;
-- Comunicação com a Interface Web.
+* Python
+* Flask
+* HTML
+* CSS
+* JavaScript
+* OpenCV
 
 ---
 
-### glaucoma/
+## RaspberryPi/
 
-Contém os algoritmos de Inteligência Artificial utilizados para processamento das imagens retinianas.
+Contains all software executed directly on the Raspberry Pi.
 
-Inclui:
+**Responsibilities**
 
-- modelos treinados;
-- pré-processamento;
-- segmentação;
-- classificação;
-- geração de mapas Grad-CAM;
-- inferência local.
-
-Os modelos podem ser executados localmente na Raspberry Pi ou remotamente por meio da plataforma Hugging Face Spaces.
+* System initialization
+* M12 camera control
+* LED illumination control
+* GPIO communication
+* Storage management
+* Wi-Fi network configuration
+* Communication with the Web Interface
 
 ---
 
-## Fluxo do software
+## glaucoma/
 
-```
+Contains the Artificial Intelligence algorithms used for retinal image analysis.
+
+This directory includes:
+
+* Trained models
+* Image preprocessing
+* Segmentation
+* Classification
+* Grad-CAM visualization generation
+* Local inference
+
+The models can be executed locally on the Raspberry Pi or remotely through the Hugging Face Spaces platform.
+
+---
+
+# Software Workflow
+
+```text
 Raspberry Pi
       │
       ▼
-Interface Web
+Web Interface
       │
       ▼
-Aquisição da imagem
+Image Acquisition
       │
       ▼
-Pré-processamento
+Preprocessing
       │
       ▼
-Inteligência Artificial
+Artificial Intelligence
       │
       ▼
-Resultado
+Results
 ```
 
 ---
 
-## Dependências
+# Dependencies
 
-- Python 3.11+
-- Flask
-- OpenCV
-- NumPy
-- Picamera2
-- libcamera
-- pigpio
-- Requests
-- Torch
-- Torchvision
-- TensorFlow Lite
-
----
-
-## Execução
-
-1. Inicializar a Raspberry Pi;
-2. Executar o servidor Flask;
-3. Conectar um smartphone ou computador via Wi-Fi;
-4. Acessar a interface Web;
-5. Capturar a imagem retiniana;
-6. Executar o processamento e a inferência.
+* Python 3.11+
+* Flask
+* OpenCV
+* NumPy
+* Picamera2
+* libcamera
+* pigpio
+* Requests
+* PyTorch
+* Torchvision
+* TensorFlow Lite
 
 ---
 
-## Desenvolvimento
+# Execution
 
-Cada módulo pode ser atualizado independentemente.
-
-A organização em diretórios facilita:
-
-- manutenção;
-- testes;
-- integração contínua;
-- reutilização dos componentes;
-- desenvolvimento colaborativo.
+1. Power on the Raspberry Pi.
+2. Start the Flask server.
+3. Connect a smartphone or computer via Wi-Fi.
+4. Access the Web Interface.
+5. Capture a retinal image.
+6. Execute image processing and AI inference.
 
 ---
 
-## Projetos relacionados
+# Development
 
-- OpenDR
-- Hugging Face Space (Glaucoma)
-- Raspberry Pi OS
-- OpenCV
+Each module can be updated independently.
+
+The modular directory structure simplifies:
+
+* Maintenance
+* Testing
+* Continuous integration
+* Component reuse
+* Collaborative development
+
+---
+
+# Related Projects
+
+* OpenDR
+* Hugging Face Spaces (Glaucoma)
+* Raspberry Pi OS
+* OpenCV
