@@ -1,108 +1,91 @@
 # Hardware
 
-Esta pasta contém todos os arquivos necessários para fabricação,
-montagem e manutenção do retinógrafo portátil.
+This directory contains all the files required for the manufacturing, assembly, and maintenance of the portable retinograph.
 
 ---
 
-## Organização
+# Directory Structure
 
-CAD/
-Modelos editáveis
+**CAD/** – Editable CAD models
 
-STL/
-Arquivos para impressão 3D
+**STL/** – Files for 3D printing
 
-BOM/
-Lista de materiais
+**BOM/** – Bill of Materials
 
-Drawings/ 
-Desenhos técnicos
+**Drawings/** – Technical drawings
 
 ---
 
-## Arquitetura Física
+# Physical Architecture
 
-(diagrama)
-
----
-
-## Processo de Fabricação
-
-Projeto CAD
-
-↓
-
-Impressão 3D
-
-↓
-
-Acabamento
-
-↓
-
-Montagem Mecânica
-
-↓
-
-Montagem Óptica
-
-↓
-
-Integração Eletrônica
-
-↓
-
-Alinhamento
-
-↓
-
-Testes
+*(Diagram)*
 
 ---
 
-## Especificações Mecânicas
+# Manufacturing Process
 
-Peso
+CAD Design
 
-Dimensões
+↓
 
-Materiais
+3D Printing
 
-Tecnologia de fabricação
+↓
 
----
+Post-Processing
 
-## Especificações Ópticas
+↓
 
-Lente 20D
+Mechanical Assembly
 
-Espelhos
+↓
 
-Lente M12
+Optical Assembly
 
-Campo de visão
+↓
 
----
+Electronic Integration
 
-## Especificações Eletrônicas
+↓
 
-Raspberry Pi 4
+Optical Alignment
 
-Camera M12
+↓
 
-LEDs
-
-Bateria
-
-Wi-Fi
+Testing
 
 ---
 
-## Referências
+# Mechanical Specifications
 
-OIO
+* Weight
+* Dimensions
+* Materials
+* Manufacturing technology
 
-Raspberry Pi
+---
 
-Open Hardware
+# Optical Specifications
+
+* 20D condensing lens
+* First-surface mirrors
+* M12 lens
+* Field of view
+
+---
+
+# Electronic Specifications
+
+* Raspberry Pi 4
+* M12 camera module
+* LEDs
+* Battery
+* Wi-Fi connectivity
+
+---
+
+# References
+
+* Open Indirect Ophthalmoscope (OIO)
+* Raspberry Pi
+* Open Hardware
