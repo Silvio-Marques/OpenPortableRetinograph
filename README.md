@@ -1,254 +1,264 @@
 # Open Portable Retinograph (OPR)
 
-**Desenvolvimento de um retinógrafo portátil open source baseado em Raspberry Pi para aquisição de imagens retinianas e triagem automatizada de retinopatias.**
+**Development of an Open-Source Portable Raspberry Pi-Based Retinograph for Retinal Image Acquisition and Automated Retinopathy Screening**
 
 ---
 
-## Autores
+# Authors
 
-**Desenvolvido por**
+**Developed by**
 
 Silvio Marques (IFPE)
 
-**Orientadores**
+**Advisors**
 
-Tiago Lima (IFPE) 
+Tiago Lima (IFPE)
 
 Helio Bentzen (IFPE)
 
 David Ribeiro (IFPE)
 
-**Instituição**
+**Institution**
 
-IFPE CAMPUS PALMARES
+IFPE – Palmares Campus
 
-Laboratório Maker campus Palmares
+Maker Laboratory – Palmares Campus
 
-Brasil
-
----
-
-# Sobre o Projeto
-
-O **Open Portable Retinograph (OPR)** é um projeto de hardware aberto desenvolvido com o objetivo de disponibilizar uma plataforma portátil e de baixo custo para aquisição de imagens do fundo de olho.
-
-O projeto integra manufatura aditiva, componentes ópticos comerciais e uma plataforma embarcada baseada em Raspberry Pi para permitir a captura de imagens retinianas utilizando hardware aberto, com foco em aplicações de pesquisa, ensino e futuras soluções de triagem automatizada de retinopatias.
-
-A arquitetura foi concebida para reduzir o custo dos equipamentos convencionais, facilitar sua reprodução por outras instituições e servir como plataforma para integração futura de algoritmos de Inteligência Artificial embarcada.
+Brazil
 
 ---
 
-# Licença
+# About the Project
 
-Este projeto é distribuído sob a licença **MIT License**.
+The **Open Portable Retinograph (OPR)** is an open-hardware project developed to provide a portable, low-cost platform for retinal fundus image acquisition.
 
-Os arquivos CAD, documentação técnica, código-fonte e modelos computacionais podem ser utilizados, modificados e redistribuídos conforme os termos da licença.
+The project combines additive manufacturing, commercially available optical components, and a Raspberry Pi-based embedded platform to enable retinal image acquisition using open-source hardware, with a focus on research, education, and future automated retinopathy screening applications.
+
+The system architecture was designed to reduce the cost of conventional retinal imaging devices, facilitate replication by other institutions, and provide a platform for the future integration of embedded Artificial Intelligence algorithms.
 
 ---
 
-# Isenção de Responsabilidade
+# License
 
-Este equipamento destina-se exclusivamente a atividades de pesquisa, desenvolvimento tecnológico e ensino.
+This project is distributed under the **MIT License**.
 
-O protótipo **não possui certificação para uso clínico** e não deve ser utilizado para diagnóstico médico sem a devida aprovação pelos órgãos reguladores competentes.
+The CAD files, technical documentation, source code, and computational models may be used, modified, and redistributed under the terms of the license.
+
+---
+
+# Disclaimer
+
+This equipment is intended exclusively for research, technological development, and educational purposes.
+
+The prototype **is not certified for clinical use** and must not be used for medical diagnosis without the appropriate approval from the relevant regulatory authorities.
 
 ---
 
 # Software Ecosystem
 
-O retinógrafo foi desenvolvido para operar de forma modular, permitindo integração com diferentes sistemas de Inteligência Artificial para análise das imagens adquiridas.
+The retinograph was designed with a modular architecture, allowing integration with different Artificial Intelligence systems for the analysis of acquired retinal images.
 
 ## OpenDR
 
-Sistema para triagem automática de Retinopatia Diabética.
+Automated Diabetic Retinopathy screening system.
 
-- Repositório: https://github.com/heliobentzen/openDR
+**Repository:**
 
-Principais recursos:
+https://github.com/heliobentzen/openDR
 
-- Captura automatizada
-- Interface Web
-- TensorFlow Lite
-- Grad-CAM
-- Relatórios
-- Classificação automática
+**Key Features**
+
+* Automated image acquisition
+* Web interface
+* TensorFlow Lite
+* Grad-CAM
+* Report generation
+* Automatic classification
 
 ---
 
 ## Glaucoma AI
 
-Sistema baseado em Deep Learning para classificação de glaucoma a partir de imagens retinianas.
+Deep Learning–based system for glaucoma classification from retinal images.
 
-- Demonstração:
+**Demo:**
+
 https://huggingface.co/spaces/tiagopessoalim/glaucoma
 
-Aplicação prevista:
+**Intended Applications**
 
-- Segunda opinião diagnóstica
-- Apoio ao rastreamento de glaucoma
-
----
-# Versão
-
-Versão atual
-
-**v1.0.0 (Protótipo funcional)**
+* Diagnostic second opinion
+* Glaucoma screening support
 
 ---
 
-# Novidades da versão 1.0
+# Version
 
-- Desenvolvimento completo da arquitetura mecânica.
-- Projeto CAD totalmente parametrizado.
-- Sistema óptico baseado em lente condensadora de 20D.
-- Integração de espelhos de primeira superfície.
-- Estrutura produzida por impressão 3D.
-- Apoio facial em TPU.
-- Raspberry Pi 4 integrada ao sistema.
-- Integração da câmera M12.
-- Sistema de iluminação por LEDs de alta potência.
-- Interface Web para operação remota.
-- Comunicação Wi-Fi entre Raspberry Pi e smartphone.
-- Captura de imagens retinianas.
-- Protótipo funcional validado em bancada.
+**Current Version**
+
+**v1.0.0 (Functional Prototype)**
 
 ---
 
-# Objetivos
+# Version 1.0 Highlights
 
-- Desenvolver um retinógrafo portátil open source.
-- Reduzir o custo de equipamentos para retinografia.
-- Facilitar a reprodução da plataforma.
-- Possibilitar futuras aplicações em Inteligência Artificial embarcada.
-- Apoiar pesquisas em Oftalmologia e Engenharia Biomédica.
-
----
-
-# Características
-
-## Estrutura Mecânica
-
-- Projeto CAD completo.
-- Impressão 3D.
-- Estrutura modular.
-- Ajuste de foco por deslocamento da caixa óptica.
-- Apoio facial em TPU.
+* Complete mechanical architecture developed
+* Fully parametric CAD design
+* Optical system based on a 20D condensing lens
+* Integration of first-surface mirrors
+* Structure manufactured using 3D printing
+* TPU facial support
+* Raspberry Pi 4 fully integrated into the system
+* M12 camera integration
+* High-power LED illumination system
+* Web-based remote operation interface
+* Wi-Fi communication between the Raspberry Pi and a smartphone
+* Retinal image acquisition
+* Functional prototype validated under laboratory bench conditions
 
 ---
 
-## Sistema Óptico
+# Objectives
 
-- Lente condensadora de 20 dioptrias.
-- Espelhos de primeira superfície.
-- Lente M12.
-- Pintura interna antirreflexo.
-- Sistema alinhável.
+* Develop an open-source portable retinograph
+* Reduce the cost of retinal imaging equipment
+* Facilitate platform replication
+* Enable future embedded Artificial Intelligence applications
+* Support research in Ophthalmology and Biomedical Engineering
+
+---
+
+# Features
+
+## Mechanical Structure
+
+* Complete CAD design
+* 3D-printed structure
+* Modular architecture
+* Focus adjustment through optical housing displacement
+* TPU facial support
+
+---
+
+## Optical System
+
+* 20-diopter condensing lens
+* First-surface mirrors
+* M12 lens
+* Anti-reflective internal coating
+* Adjustable optical alignment
 
 ---
 
 ## Hardware
 
-- Raspberry Pi 4
-- Módulo de câmera M12
-- LEDs de alta potência
-- Bateria recarregável
-- Interface Wi-Fi
+* Raspberry Pi 4
+* M12 camera module
+* High-power LEDs
+* Rechargeable battery
+* Wi-Fi connectivity
 
 ---
 
-## Interface
+## User Interface
 
-- Captura remota
-- Visualização em tempo real
-- Armazenamento das imagens
-- Controle via navegador
-- Compatível com smartphones e computadores
-
----
-
-# Especificações do Protótipo
-
-| Característica | Valor |
-|----------------|-------|
-| Tempo de desenvolvimento | 5 meses |
-| Peso | ~800 g |
-| Custo | US\$ 491 |
-| Estrutura | PLA + TPU + MDF |
-| Comunicação | Wi-Fi |
-| Interface | Web |
-| Autonomia | ~40 minutos |
-| Inicialização | ~2 minutos |
-| Dispositivos simultâneos | 2 |
+* Remote image acquisition
+* Real-time visualization
+* Image storage
+* Browser-based control
+* Compatible with smartphones and computers
 
 ---
 
-# Organização do Projeto
+# Prototype Specifications
 
-```
+| Feature              |           Value |
+| -------------------- | --------------: |
+| Development time     |        5 months |
+| Weight               |          ~800 g |
+| Cost                 |          US$491 |
+| Structure            | PLA + TPU + MDF |
+| Communication        |           Wi-Fi |
+| Interface            |             Web |
+| Battery life         |     ~40 minutes |
+| Boot time            |      ~2 minutes |
+| Simultaneous devices |               2 |
+
+---
+
+# Project Organization
+
+```text
 OpenPortableRetinograph/
 │
 ├── hardware/
-│   Arquivos relacionados ao desenvolvimento do hardware:
-│   modelos CAD, arquivos STL, desenhos técnicos,
-│   lista de materiais (BOM), esquemáticos e documentação
-│   da montagem do protótipo.
+│   Files related to hardware development,
+│   including CAD models, STL files, technical drawings,
+│   bill of materials (BOM), schematics,
+│   and prototype assembly documentation.
 │
 ├── software/
-│   Código-fonte utilizado no retinógrafo, incluindo
-│   aplicações para Raspberry Pi, interface Web e
-│   algoritmos de processamento de imagens.
+│   Source code used by the retinograph,
+│   including Raspberry Pi applications,
+│   the web interface,
+│   and image processing algorithms.
 │
 ├── images/
-│   Fotografias do desenvolvimento, protótipos,
-│   modelos CAD renderizados e resultados obtidos
-│   durante os testes do equipamento.
+│   Development photographs,
+│   prototype images,
+│   rendered CAD models,
+│   and experimental results obtained
+│   during equipment testing.
 │
 └── README.md
-    Documentação principal do projeto.
+    Main project documentation.
 ```
 
-À medida que o projeto evoluir, novos diretórios poderão ser adicionados para documentação técnica, modelos de Inteligência Artificial, artigos científicos e resultados experimentais.
-# Estado Atual
-
-| Módulo | Status |
-|---------|--------|
-| Projeto CAD | ✅ |
-| Sistema Óptico | ✅ |
-| Impressão 3D | ✅ |
-| Raspberry Pi | ✅ |
-| Interface Web | ✅ |
-| Captura de Imagens | ✅ |
-| Testes Ópticos | ✅ |
-| Inteligência Artificial |  |
-| Validação Clínica |  |
+As the project evolves, additional directories may be added for technical documentation, Artificial Intelligence models, scientific publications, and experimental results.
 
 ---
 
-# Trabalhos Futuros
+# Current Status
 
-- Otimização do sistema óptico.
-- Desenvolvimento da versão miniaturizada.
-- Integração de modelos TensorFlow Lite.
-- Segmentação automática da retina.
-- Classificação automática de retinopatias.
-- Aplicativo móvel dedicado.
-- Validação clínica.
-- Publicação open hardware.
-
----
-
-# Agradecimentos
-
-Agradecemos às instituições e colaboradores envolvidos no desenvolvimento deste projeto, bem como à comunidade de Hardware Aberto e aos projetos Open Indirect Ophthalmoscope (OIO), Raspberry Pi Foundation e OpenCV, que serviram de inspiração para o desenvolvimento desta plataforma.
+| Module                    | Status |
+| ------------------------- | :----: |
+| CAD Design                |    ✅   |
+| Optical System            |    ✅   |
+| 3D Printing               |    ✅   |
+| Raspberry Pi Integration  |    ✅   |
+| Web Interface             |    ✅   |
+| Retinal Image Acquisition |    ✅   |
+| Optical Testing           |    ✅   |
+| Artificial Intelligence   |        |
+| Clinical Validation       |        |
 
 ---
 
-# Contato
+# Future Work
 
-Autor
+* Optical system optimization
+* Development of a miniaturized version
+* TensorFlow Lite model integration
+* Automatic retinal segmentation
+* Automated retinopathy classification
+* Dedicated mobile application
+* Clinical validation
+* Open-hardware publication
 
-smxj@discente.ifpe.edu.br
+---
 
-GitHub
+# Acknowledgments
+
+The authors would like to thank the institutions and collaborators involved in the development of this project, as well as the Open Hardware community and the Open Indirect Ophthalmoscope (OIO), Raspberry Pi Foundation, and OpenCV projects, which served as important sources of inspiration for the development of this platform.
+
+---
+
+# Contact
+
+**Author**
+
+[smxj@discente.ifpe.edu.br](mailto:smxj@discente.ifpe.edu.br)
+
+**GitHub**
 
 https://github.com/usuario/OpenPortableRetinograph
