@@ -1,97 +1,99 @@
 # Drawings
 
-Esta pasta contém os desenhos de montagem utilizados na construção do retinógrafo portátil.
+This directory contains the assembly drawings used for the construction of the portable retinograph.
 
-Os documentos apresentados servem como referência para a montagem mecânica, posicionamento dos componentes ópticos e integração do hardware embarcado.
-
-## Arquivos
-
-### Componentes.pdf
-
-Vista explodida do retinógrafo contendo todos os componentes utilizados na montagem.
-
-Os principais elementos identificados são:
-
-| Identificação | Descrição |
-|--------------|-----------|
-| A | Apoio facial (TPU) |
-| B | Caixa óptica |
-| C | Carcaça principal |
-| D | Suporte para smartphone |
-| E | Adaptador para tela LCD (opcional) |
-| F | Espelhos de primeira superfície |
-| G | Suporte dos espelhos |
-| H | Suporte da lente condensadora |
-| I | Raspberry Pi 4 |
-| J | Módulo de câmera M12 |
-| K | Smartphone (interface Web) |
-| L | Lente condensadora +20D |
-| M | Placa eletrônica |
-| N | Sistema de iluminação LED |
+The documents provided serve as references for mechanical assembly, optical component positioning, and embedded hardware integration.
 
 ---
 
-### Esquema.pdf
+# Files
 
-Desenho dimensional do protótipo.
+## Componentes.pdf
 
-Apresenta:
+Exploded-view drawing of the retinograph showing all components used in the assembly.
 
-- dimensões externas;
-- posicionamento dos subconjuntos;
-- alinhamento óptico;
-- localização da câmera;
-- posição da lente condensadora;
-- dimensões gerais do equipamento.
+The main components are identified as follows:
 
-Dimensões aproximadas do protótipo:
-
-- Comprimento: **26 cm**
-- Altura: **17 cm**
-- Largura: **11 cm**
-
----
-
-# Sequência de montagem
-
-A montagem recomendada do equipamento é realizada na seguinte ordem:
-
-1. Impressão das peças em PLA e TPU.
-2. Fabricação da base estrutural em MDF.
-3. Montagem da caixa óptica.
-4. Instalação dos espelhos de primeira superfície.
-5. Instalação do suporte da lente condensadora.
-6. Fixação da lente de +20 dioptrias.
-7. Instalação da câmera M12.
-8. Inserção da caixa óptica na carcaça principal.
-9. Ajuste do mecanismo de focalização.
-10. Instalação do sistema de iluminação LED.
-11. Fixação da Raspberry Pi 4.
-12. Conexão elétrica entre câmera, LEDs e Raspberry Pi.
-13. Instalação da placa eletrônica.
-14. Conexão da alimentação.
-15. Testes de alinhamento óptico.
-16. Ajuste fino do foco.
-17. Conexão via Wi-Fi utilizando smartphone.
-18. Testes finais de captura.
+| Identifier | Description                    |
+| ---------- | ------------------------------ |
+| A          | Facial support (TPU)           |
+| B          | Optical housing                |
+| C          | Main enclosure                 |
+| D          | Smartphone mount               |
+| E          | LCD display adapter (optional) |
+| F          | First-surface mirrors          |
+| G          | Mirror holder                  |
+| H          | Condensing lens holder         |
+| I          | Raspberry Pi 4                 |
+| J          | M12 camera module              |
+| K          | Smartphone (Web interface)     |
+| L          | +20D condensing lens           |
+| M          | Electronic circuit board       |
+| N          | LED illumination system        |
 
 ---
 
-# Observações
+## Esquema.pdf
 
-- O apoio facial é produzido em TPU para proporcionar maior conforto e adaptação a diferentes formatos de rosto.
-- O sistema foi projetado para utilização com smartphone como interface principal, reduzindo o custo do equipamento.
-- A arquitetura também permite a instalação de uma tela LCD de 5" ou 3,5", embora esta configuração seja opcional.
-- Todas as peças estruturais foram desenvolvidas para fabricação por impressão 3D, permitindo fácil reprodução e manutenção do equipamento.
+Dimensional drawing of the prototype.
+
+It includes:
+
+* External dimensions
+* Subassembly layout
+* Optical alignment
+* Camera position
+* Condensing lens position
+* Overall device dimensions
+
+Approximate prototype dimensions:
+
+* **Length:** 26 cm
+* **Height:** 17 cm
+* **Width:** 11 cm
 
 ---
 
-# Documentação relacionada
+# Assembly Sequence
 
-Consulte também:
+The recommended assembly procedure is as follows:
 
-- `/hardware/CAD`
-- `/hardware/STL`
-- `/hardware/BOM`
-- `/hardware/Schematics`
-- `/hardware/Datasheets`
+1. Print the PLA and TPU components.
+2. Fabricate the MDF structural base.
+3. Assemble the optical housing.
+4. Install the first-surface mirrors.
+5. Install the condensing lens holder.
+6. Mount the +20D condensing lens.
+7. Install the M12 camera module.
+8. Insert the optical housing into the main enclosure.
+9. Adjust the focusing mechanism.
+10. Install the LED illumination system.
+11. Secure the Raspberry Pi 4.
+12. Connect the camera, LEDs, and Raspberry Pi.
+13. Install the electronic circuit board.
+14. Connect the power supply.
+15. Perform optical alignment tests.
+16. Fine-tune the focus.
+17. Establish the Wi-Fi connection using a smartphone.
+18. Perform final image acquisition tests.
+
+---
+
+# Notes
+
+* The facial support is manufactured from TPU to provide improved comfort and accommodate different facial anatomies.
+* The system was designed to use a smartphone as the primary user interface, reducing the overall cost of the device.
+* The architecture also supports the installation of a 5-inch or 3.5-inch LCD display, although this configuration is optional.
+* All structural components were designed for additive manufacturing using 3D printing, enabling straightforward reproduction and maintenance of the device.
+
+---
+
+# Related Documentation
+
+See also:
+
+* `/hardware/CAD`
+* `/hardware/STL`
+* `/hardware/BOM`
+* `/hardware/Schematics`
+* `/hardware/Datasheets`
